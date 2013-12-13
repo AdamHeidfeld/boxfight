@@ -1,8 +1,9 @@
-function getMousePos(canvas, evt) {
+function getMousePos(canvas, evt) 
+{
 	var rect = canvas.getBoundingClientRect();
 	return {
 		x: evt.clientX - rect.left,
-			y: evt.clientY - rect.top
+		y: evt.clientY - rect.top,
 	};
 }
 
@@ -30,6 +31,17 @@ function drawBoard(canvas, number)
 
 function drawSegment(canvas, posX, posY)
 {
+	var pos = getPosition(posX, posY);
+	drawLine(canvas, pos.fromX*50, pos.fromY*50, pos.toX*50, pos.toY*50, "#000000");
+}
+
+function setBoardDate(posX, posY)
+{
+	var pos = getPosition(posX, posY);
+}
+
+function getPosition(posX, posY)
+{
 	var Xmod = posX%50;
 	var XXmod = Xmod;
 	var Xdiv = Math.floor(posX/50);
@@ -51,7 +63,12 @@ function drawSegment(canvas, posX, posY)
 		{
 			Ydiv++;
 		}
-		drawLine(canvas, 50*Xdiv, 50*Ydiv, 50*Xdiv+50, 50*Ydiv, "#000000");
+		return {
+			fromX: Xdiv,
+			fromY: Ydiv,
+			toX: Xdiv+1,
+			toY: Ydiv,
+		};
 	}
 	else 
 	{
@@ -59,9 +76,16 @@ function drawSegment(canvas, posX, posY)
 		{
 			Xdiv++;
 		}
-		drawLine(canvas, 50*Xdiv, 50*Ydiv, 50*Xdiv, 50*Ydiv+50, "#000000");
+		return {
+			fromX: Xdiv,
+			fromY: Ydiv,
+			toX: Xdiv,
+			toY: Ydiv+1,
+		};
 	}
 }
+
+var boardLines;
 
 var canvas = document.getElementById('board');
 
@@ -69,6 +93,7 @@ canvas.addEventListener('mousedown', function(evt) {
 	var mousePos = getMousePos(canvas, evt);
 	var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
 	drawSegment(canvas, mousePos.x, mousePos.y);
+	setBoardDate(mousePos.x, mousePos.y);
 }, false);
 
 drawBoard(canvas, 7);
